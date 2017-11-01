@@ -1,1 +1,2 @@
-tools for interacting with the pubmed API and pubmed XML files
+## Download PubMed records from file
+    ./pubmed-download.py data/pmids data/documents/

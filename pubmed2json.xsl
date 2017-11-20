@@ -9,7 +9,7 @@
 		<xsl:template match="MedlineCitation">
 			{
 				"PMID": <xsl:value-of select="PMID" />,
-				"Title": "<xsl:value-of select="Article/ArticleTitle" />",
+				"Title": "<xsl:apply-templates select="Article/ArticleTitle" />",
 				"Authors": [
 				<xsl:apply-templates select="Article/AuthorList" />
 				],
@@ -43,6 +43,11 @@
 				<xsl:if test="position() != last()">, </xsl:if>
 			</xsl:for-each>
 		</xsl:template>
+		<xsl:template match="ArticleTitle">
+			<xsl:call-template name="_escape">
+				<xsl:with-param name="str" select="." />
+			</xsl:call-template>
+		</xsl:template>
 		<xsl:template match="PubDate">
 			<xsl:value-of select="Year" />
 		</xsl:template>
@@ -54,7 +59,7 @@
 		</xsl:template>
 		<xsl:template match="AbstractText">
 			<xsl:text>"</xsl:text>
-			<xsl:value-of select="." />
+			<xsl:call-template name="_escape" />
 			<xsl:text>"</xsl:text>
 			<xsl:if test="position() != last()">, </xsl:if>
 		</xsl:template>
@@ -82,4 +87,21 @@
 			<span class="Country"><xsl:value-of select="Country" /></span>
 		</xsl:template>
 		<xsl:template match="text()" />
+		<xsl:template name="_escape">
+			<xsl:param name="str" select="."/>
+		
+			<xsl:if test="string-length($str) >0">
+				<xsl:value-of select=
+				"substring-before(concat($str, '&quot;'), '&quot;')"/>
+			
+				<xsl:if test="contains($str, '&quot;')">
+					<xsl:text>\"</xsl:text>
+			
+					<xsl:call-template name="_escape">
+						<xsl:with-param name="str" select=
+						"substring-after($str, '&quot;')"/>
+					</xsl:call-template>
+				</xsl:if>
+			</xsl:if>
+		</xsl:template>
 </xsl:transform>

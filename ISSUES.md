@@ -5,3 +5,4 @@
   DB schema currently doesn't support this, so only the first entry is
   used.
 * Structured abstracts are not yet fully supported.
+* The `_escape` template should be applied to every string from the source XML. Also, the template should escape backslashes (`\`) into double-backslashes (`\\`).

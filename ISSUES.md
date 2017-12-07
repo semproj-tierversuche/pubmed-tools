@@ -6,3 +6,7 @@
   used.
 * Structured abstracts are not yet fully supported.
 * The `_escape` template should be applied to every string from the source XML. Also, the template should escape backslashes (`\`) into double-backslashes (`\\`).
+
+# elastic-store-documents.py
+* Blindly stores every file in `data/documents/*.json` in the database,
+  without checking for duplicates, well-formedness or anything else.

@@ -12,7 +12,7 @@ import os
 import gzip
 
 mainURL = 'ftp.ncbi.nlm.nih.gov'
-pSIZES = 50
+pSIZES = 5
 
 def info(pString):
     print("-------------------")
@@ -110,4 +110,4 @@ def getfileNames( urlDir, fileListTXT ):
 
 
 if __name__ == '__main__':
-    getfileNames("pubmed/baseline/", "downloadFileBaseline.txt")
+    getfileNames("pubmed/baseline/", "../nxtBaselinefiles.txt")

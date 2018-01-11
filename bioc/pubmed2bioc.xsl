@@ -56,6 +56,17 @@
 				<xsl:apply-templates select="Article/Abstract/AbstractText" />
 			</xsl:element>
 		</xsl:element>
+		<xsl:element name="passage">
+			<xsl:element name="infon">
+				<xsl:attribute name="key">type</xsl:attribute>
+				<xsl:text>metadata</xsl:text>
+			</xsl:element>
+			<xsl:element name="offset">
+				<xsl:value-of select="string-length(Article/ArticleTitle) + 2" />
+			</xsl:element>
+			<xsl:apply-templates select="MeshHeadingList" />
+			<xsl:apply-templates select="ChemicalList" />
+		</xsl:element>
 	</xsl:template>
 	<!--
 		 This template matches sections from structured abstracts.
@@ -72,6 +83,58 @@
 	<!-- This template matches for non-structured abstracts. -->
 	<xsl:template match="AbstractText[not(@Label)]">
 		<xsl:value-of select="." />
+	</xsl:template>
+	<!-- The following three templates match MeSH headings and/or Chemicals -->
+	<xsl:template match="MeshHeading|Chemical">
+		<xsl:element name="sentence">
+			<xsl:element name="infon">
+				<xsl:attribute name="key">type</xsl:attribute>
+				<xsl:value-of select="local-name()" />
+			</xsl:element>
+			<xsl:element name="offset">
+				<xsl:text>0</xsl:text>
+			</xsl:element>
+			<xsl:apply-templates />
+		</xsl:element>
+	</xsl:template>
+	<xsl:template match="DescriptorName|QualifierName|NameOfSubstance">
+		<xsl:element name="annotation">
+			<xsl:element name="infon">
+				<xsl:attribute name="key">
+					<xsl:text>type</xsl:text>
+				</xsl:attribute>
+				<xsl:choose>
+					<xsl:when test="local-name() = 'DescriptorName'">
+						<xsl:text>Descriptor</xsl:text>
+					</xsl:when>
+					<xsl:when test="local-name() = 'QualifierName'">
+						<xsl:text>Qualifier</xsl:text>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="local-name()" />
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:element>
+			<xsl:element name="infon">
+				<xsl:attribute name="key">
+					<xsl:text>UI</xsl:text>
+				</xsl:attribute>
+				<xsl:value-of select="@UI" />
+			</xsl:element>
+			<!-- create the MajorTopicYN infon, if it exists -->
+			<xsl:apply-templates select="@MajorTopicYN" />
+			<xsl:element name="text">
+				<xsl:value-of select="." />
+			</xsl:element>
+		</xsl:element>
+	</xsl:template>
+	<xsl:template match="@MajorTopicYN">
+		<xsl:element name="infon">
+			<xsl:attribute name="key">
+				<xsl:text>MajorTopicYN</xsl:text>
+			</xsl:attribute>
+			<xsl:value-of select="." />
+		</xsl:element>
 	</xsl:template>
 	<!--
 		 this empty template is required to remove extraneous text and

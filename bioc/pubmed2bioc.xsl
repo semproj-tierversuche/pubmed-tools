@@ -66,6 +66,7 @@
 			</xsl:element>
 			<xsl:apply-templates select="MeshHeadingList" />
 			<xsl:apply-templates select="ChemicalList" />
+			<xsl:apply-templates select="KeywordList" />
 		</xsl:element>
 	</xsl:template>
 	<!--
@@ -134,6 +135,25 @@
 				<xsl:text>MajorTopicYN</xsl:text>
 			</xsl:attribute>
 			<xsl:value-of select="." />
+		</xsl:element>
+	</xsl:template>
+	<xsl:template match="Keyword">
+		<xsl:element name="sentence">
+			<xsl:element name="infon">
+				<xsl:attribute name="key">
+					<xsl:text>type</xsl:text>
+				</xsl:attribute>
+				<xsl:text>Keyword</xsl:text>
+			</xsl:element>
+			<xsl:element name="offset">
+				<xsl:text>0</xsl:text>
+			</xsl:element>
+			<xsl:element name="annotation">
+				<xsl:apply-templates select="@MajorTopicYN" />
+				<xsl:element name="text">
+					<xsl:value-of select="." />
+				</xsl:element>
+			</xsl:element>
 		</xsl:element>
 	</xsl:template>
 	<!--
